@@ -1,12 +1,9 @@
 import { useState } from "react";
-
-type Todo = {
-  description: string;
-  priority: Priority;
-  duedate: string;
-}
-
-type Priority = "low" | "medium" | "high";
+import TodoTable from "./TodoTable";
+import type { Todo, Priority } from "../types";
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Stack from '@mui/material/Stack';
 
 function TodoList() {
   const [todo, setTodo] = useState<Todo>({
@@ -30,56 +27,49 @@ function TodoList() {
     }
   }
 
-  const handleDelete = (row: number) => { // row = 1
-    setTodos(todos.filter((_, index) => row != index));
+  const handleDelete = (row: number) => {
+    if (window.confirm("Are you sure?"))
+      setTodos(todos.filter((_, index) => row != index));
   }
 
   return(
     <>
-      <h3>My Todos</h3>
-      <input 
-        placeholder="Enter description..."
-        value={todo.description}
-        onChange={e => setTodo({...todo, description: e.target.value})}
-      />
-      <select
-        title="Priority"
-        value={todo.priority}
-        onChange={e => setTodo({...todo, priority: e.target.value as Priority})}    
+      <Stack 
+        mt={2}
+        direction="row" 
+        spacing={2} 
+        alignItems="center" 
+        justifyContent="center"
       >
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-      </select>
-      <input 
-        type="date"
-        placeholder="Enter duedate..."
-        value={todo.duedate}
-        onChange={e => setTodo({...todo, duedate: e.target.value})}
-      />
-      <button onClick={handleAdd}>Add Todo</button>
-      <table>
-        <thead>
-          <tr>
-            <th>Description</th>
-            <th>Priority</th>
-            <th>Due date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            todos.map((todo, index) =>
-              <tr key={index}>
-                <td>{todo.description}</td>
-                <td>{todo.priority}</td>
-                <td>{todo.duedate}</td>
-                <td><button onClick={() => handleDelete(index)}>Delete</button></td>
-              </tr>
-            )
-          }
-        </tbody>
-      </table>
+        <TextField
+          label="Description"
+          value={todo.description}
+          onChange={e => setTodo({...todo, description: e.target.value})}
+        />
+        <TextField
+          title="Priority"
+          select
+          slotProps={{
+            select: {
+              native: true,
+            },
+          }}
+          value={todo.priority}
+          onChange={e => 
+            setTodo({...todo, priority: e.target.value as Priority})}    
+        >
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </TextField>
+        <TextField
+          type="date"
+          value={todo.duedate}
+          onChange={e => setTodo({...todo, duedate: e.target.value})}
+        />
+        <Button variant="contained" onClick={handleAdd}>Add Todo</Button>
+      </Stack>
+      <TodoTable todos={todos} handleDelete={handleDelete} />
     </>
   );
 }
