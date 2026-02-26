@@ -30,9 +30,9 @@ function TodoList() {
     }
   }
 
-  const handleDelete = (row: number) => {
+  const handleDelete = (id: string) => {
     if (window.confirm("Are you sure?"))
-      setTodos(todos.filter((_, index) => row != index));
+      setTodos(todos.filter((todo) => id != todo.id));
   }
 
   return(
