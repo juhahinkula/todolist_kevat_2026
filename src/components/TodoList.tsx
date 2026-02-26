@@ -4,9 +4,11 @@ import type { Todo, Priority } from "../types";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
+import { v4 as uuidv4 } from 'uuid';
 
 function TodoList() {
   const [todo, setTodo] = useState<Todo>({
+    id: "",
     description: "",
     priority: "low",
     duedate: "" 
@@ -15,8 +17,9 @@ function TodoList() {
 
   const handleAdd = () => {
     if (todo.description.trim()) {
-      setTodos([todo, ...todos]);
+      setTodos([{...todo, id: uuidv4()}, ...todos]);
       setTodo({
+        id: "",
         description: "",
         priority: "low",
         duedate: ""
@@ -36,6 +39,7 @@ function TodoList() {
     <>
       <Stack 
         mt={2}
+        mb={2}
         direction="row" 
         spacing={2} 
         alignItems="center" 

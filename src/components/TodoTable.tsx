@@ -1,4 +1,6 @@
 import type { Todo } from "../types";
+import type { GridColDef } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 
 type TodoTableProps = {
   todos: Todo[];
@@ -6,33 +8,19 @@ type TodoTableProps = {
 }
 
 function TodoTable(props: TodoTableProps) {
+  const columns: GridColDef[] = [
+    { field: "description", headerName: "Description", width: 250 },
+    { field: "priority", headerName: "Priority" },
+    { field: "duedate", headerName: "Due date" }
+  ]
+
   return(
-      <table>
-        <thead>
-          <tr>
-            <th>Description</th>
-            <th>Priority</th>
-            <th>Due date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            props.todos.map((todo, index) =>
-              <tr key={index}>
-                <td>{todo.description}</td>
-                <td>{todo.priority}</td>
-                <td>{todo.duedate}</td>
-                <td>
-                  <button onClick={() => props.handleDelete(index)}>
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            )
-          }
-        </tbody>
-      </table>
+    <div style={{ width: "60%", height: 500, margin: "auto" }} >
+      <DataGrid 
+        rows={props.todos}
+        columns={columns}
+      />
+    </div>
   );
 }
 
